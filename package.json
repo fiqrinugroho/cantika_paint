@@ -1,0 +1,39 @@
+{
+  "name": "cantika-paint",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon -r dotenv/config bin/www",
+    "db:config": "sequelize db:migrate && sequelize db:seed:all",
+    "db:create": "sequelize db:create",
+    "db:migrate": "sequelize db:migrate",
+    "db:migrate:undo": "sequelize db:migrate:undo:all",
+    "test": "jest --setupFiles dotenv/config --coverage --forceExit --detectOpenHandles"
+  },
+  "author": "Muhammad Fiqri Nugroho",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "http-status": "^1.5.3",
+    "jsonwebtoken": "^9.0.0",
+    "moment": "^2.29.4",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^2.0.20",
+    "pg": "^8.8.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.32.0",
+    "sequelize-cli": "^6.5.2",
+    "supertest": "^6.3.3",
+    "swagger-ui-express": "^4.6.0"
+  },
+  "devDependencies": {
+    "jest": "^29.3.1",
+    "prettier": "^2.8.0"
+  }
+}

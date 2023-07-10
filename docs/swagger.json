@@ -1,0 +1,1857 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Cantika Paint API",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Auth API Collection"
+    },
+    {
+      "name": "Item",
+      "description": "Item API Collection"
+    },
+    {
+      "name": "Transaction",
+      "description": "Transaction API Collection"
+    },
+    {
+      "name": "Shipment",
+      "description": "Shipment API Collection"
+    }
+  ],
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Admin register a new user",
+        "requestBody": {
+          "description": "Only admin can add new user ",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fullName": {
+                    "type": "string",
+                    "example": "Muhamad Saddam Husein"
+                  },
+                  "username": {
+                    "type": "string",
+                    "example": "adam"
+                  },
+                  "branchId": {
+                    "type": "integer",
+                    "example": "2"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "qwerty123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success Register New User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Success Register New Employee"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/responsesLogin"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "username Already Exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "username already used"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "API for login",
+        "requestBody": {
+          "description": "API Login For All User",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "adam"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "qwerty123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Success Login"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/responsesLogin"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Incorrect Password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "The password you entered is incorrect"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Email Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "user not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/user": {
+      "get": {
+        "summary": "Get all user data",
+        "description": "This API for see all user data",
+        "tags": ["Auth"],
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "only admin can see this data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "totalData": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/isAdmin"
+          }
+        }
+      }
+    },
+    "/api/item/add": {
+      "post": {
+        "summary": "Add new item data",
+        "tags": ["Item"],
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBody/itemBody"
+        },
+        "responses": {
+          "201": {
+            "description": "Success Create New Item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Sukses"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Sukses Menambahkan Data Barang"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/item",
+                      "branch": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/branch"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "response if color value is empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "warna tidak boleh kosong"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/isAdmin"
+          }
+        }
+      }
+    },
+    "/api/item/update/{id}": {
+      "put": {
+        "summary": "Update Item Data By Id",
+        "tags": ["Item"],
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "description": "input id item",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBody/itemBody"
+        },
+        "responses": {
+          "200": {
+            "description": "Success Update Item Data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Sukses Mengupdate Data Barang"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/item",
+                      "branch": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/branch"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/itemNotFound"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/isAdmin"
+          }
+        }
+      }
+    },
+    "/api/item/delete/{id}": {
+      "delete": {
+        "summary": "Delete Item Data By Id",
+        "tags": ["Item"],
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "description": "input id item",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Delete Data Item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Sukses Menghapus Data Barang"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/itemNotFound"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/isAdmin"
+          }
+        }
+      }
+    },
+    "/api/item/getAll": {
+      "get": {
+        "summary": "Get all item data",
+        "description": "This API for see all item data",
+        "tags": ["Item"],
+        "responses": {
+          "200": {
+            "description": "success get all item data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Sukses Menampilkan Data Barang"
+                    },
+                    "totalData": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/item",
+                      "branch": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/branch"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/item/get/{id}": {
+      "get": {
+        "summary": "Get all item By Id",
+        "description": "This API for see item data By Id",
+        "tags": ["Item"],
+        "parameters": [
+          {
+            "in": "path",
+            "description": "input id item",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success get item data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data Barang ditemukan"
+                    },
+                    "totalData": {
+                      "type": "integer",
+                      "example": "2"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/item",
+                      "branch": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/branch"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/itemNotFound"
+          }
+        }
+      }
+    },
+    "/api/item/branch/{id}": {
+      "get": {
+        "summary": "Get all item data By Branch Id",
+        "description": "This API for see all item data by branch id",
+        "tags": ["Item"],
+        "parameters": [
+          {
+            "in": "path",
+            "description": "input branch id",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success get all item data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Menampilkan Data Barang"
+                    },
+                    "totalData": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/item",
+                      "branch": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/branch"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/item/filter": {
+      "get": {
+        "summary": "Get all item data By type and branch",
+        "description": "This API for see all item data by type and branch id",
+        "tags": ["Item"],
+        "parameters": [
+          {
+            "in": "query",
+            "description": "input type item",
+            "name": "type",
+            "required": true,
+            "example": "super"
+          },
+          {
+            "in": "query",
+            "description": "input branch id",
+            "name": "branchId",
+            "required": true,
+            "example": "2"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success get all item data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Menampilkan Data Barang"
+                    },
+                    "totalData": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/item",
+                      "branch": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/branch"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/item/search": {
+      "get": {
+        "summary": "search item data By color and branch",
+        "description": "This API for search item data by color and branch id",
+        "tags": ["Item"],
+        "parameters": [
+          {
+            "in": "query",
+            "description": "input item color",
+            "name": "color",
+            "required": true,
+            "example": "white"
+          },
+          {
+            "in": "query",
+            "description": "input branch id",
+            "name": "branchId",
+            "required": true,
+            "example": "2"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success get item data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Menampilkan Data Barang"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/item",
+                      "branch": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/branch"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/transaction/add": {
+      "post": {
+        "summary": "Add new transaction data",
+        "tags": ["Transaction"],
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBody/transactionBody"
+        },
+        "responses": {
+          "201": {
+            "description": "Success Add Transaction Data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "laporan berhasil disimpan"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/transaction"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "response if out value is empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "masukan jumlah barang keluar"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/transaction/update/{id}": {
+      "put": {
+        "summary": "Update transaction Data By Id",
+        "tags": ["Transaction"],
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "description": "input id transaction",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "Transaction Data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "out": {
+                    "type": "integer",
+                    "example": "5"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Update Transaction Data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Sukses Mengupdate Data Transaksi"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/item",
+                      "branch": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/branch"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "response if out value is empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "masukan jumlah barang keluar"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/transactionNotFound"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/transaction/delete/{id}": {
+      "delete": {
+        "summary": "Delete Transaction Data By Id",
+        "tags": ["Transaction"],
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "description": "input id transaksi",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Delete Data Transaction",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Sukses Menghapus Data Transaction"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "response if item not updated when delete transaction",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "data barang gagal diperbarui"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/isAdmin"
+          },
+          "404": {
+            "$ref": "#/components/responses/itemNotFound"
+          }
+        }
+      }
+    },
+    "/api/transaction/get": {
+      "get": {
+        "summary": "Get all transaction data",
+        "description": "This API for see all transaction data by user branch",
+        "tags": ["Transaction"],
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success get all transaction data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Sukses Menampilkan Data Transaksi"
+                    },
+                    "totalData": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/transaction"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/transaction/search": {
+      "get": {
+        "summary": "Get transaction data By Date",
+        "description": "This API for search transaction data by user branch and date",
+        "tags": ["Transaction"],
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "description": "input date transaction",
+            "example":"2023-07-03",
+            "name": "date",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success get all transaction data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Sukses Menampilkan Data Transaksi"
+                    },
+                    "totalData": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/transaction"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "response if transaction is empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data Transaksi Masih Kosong"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shipment/add": {
+      "post": {
+        "summary": "Add new shipment data",
+        "tags": ["Shipment"],
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBody/shipmentBody"
+        },
+        "responses": {
+          "201": {
+            "description": "Success Add Shipment Data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "laporan pengiriman berhasil disimpan"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/shipment"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "response if add value is empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "masukan jumlah barang masuk"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/shipment/update/{id}": {
+      "put": {
+        "summary": "Update Shipment Data By Id",
+        "tags": ["Shipment"],
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "description": "input id shipment",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "Shipment Data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "add": {
+                    "type": "integer",
+                    "example": "25"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Update Shipment Data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Sukses Mengupdate Data Pengiriman"
+                    },
+                    "data": {
+                      "type": "object",
+                         "$ref": "#/components/schemas/shipment"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "response if add value is empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "masukan jumlah barang masuk"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/shipmentNotFound"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/shipment/delete/{id}": {
+      "delete": {
+        "summary": "Delete Shimpent Data By Id",
+        "tags": ["Shipment"],
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "description": "input id shipment",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Delete Data Shipment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Sukses Menghapus Data Pengiriman"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "response if item not updated when delete shipment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "data barang gagal diperbarui"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/shipmentNotFound"
+          }
+        }
+      }
+    },
+    "/api/shipment/get": {
+      "get": {
+        "summary": "Get all shipment data",
+        "description": "This API for see all shipment data by user branch",
+        "tags": ["Shipment"],
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success get all shipment data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Sukses Menampilkan Data Transaksi"
+                    },
+                    "totalData": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/shipment"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shipment/search": {
+      "get": {
+        "summary": "Get shipment data By Date",
+        "description": "This API for search shipment data by user branch and date",
+        "tags": ["Shipment"],
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "description": "input date shipment",
+            "example":"2023-07-03",
+            "name": "date",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success get all shipment data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Sukses Menampilkan Data Pengiriman"
+                    },
+                    "totalData": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/shipment"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "response if shipment is empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data Pengiriman Masih Kosong"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "Unauthorized": {
+        "description": "Need Token for access",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "fail"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Token Tidak Valid"
+                }
+              }
+            }
+          }
+        }
+      },
+      "isAdmin": {
+        "description": "Employee Can't Access This API",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "Unauthorized Access"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "hanya admin yang dapat mengakses ini"
+                }
+              }
+            }
+          }
+        }
+      },
+      "itemNotFound": {
+        "description": "Data Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "Failed"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Data Barang Tidak Ditemukan"
+                }
+              }
+            }
+          }
+        }
+      },
+      "transactionNotFound": {
+        "description": "Data Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "Failed"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Data Transaksi Tidak Ditemukan"
+                }
+              }
+            }
+          }
+        }
+      },
+      "shipmentNotFound": {
+        "description": "Data Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "Failed"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Data Pengiriman Tidak Ditemukan"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "requestBody": {
+      "itemBody": {
+        "description": "Item Data",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "color": {
+                  "type": "string",
+                  "example": "black"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "super"
+                },
+                "stock": {
+                  "type": "integer",
+                  "example": "25"
+                },
+                "branchId": {
+                  "type": "integer",
+                  "example": "2"
+                }
+              }
+            }
+          }
+        }
+      },
+      "transactionBody": {
+        "description": "Transaction Data",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "itemId": {
+                  "type": "integer",
+                  "example": "1"
+                },
+                "branchId": {
+                  "type": "integer",
+                  "example": "2"
+                },
+                "out": {
+                  "type": "integer",
+                  "example": "5"
+                },
+                "date": {
+                  "type": "date",
+                  "example": "2023-07-03"
+                }
+              }
+            }
+          }
+        }
+      },
+      "shipmentBody": {
+        "description": "Shipment Data",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "itemId": {
+                  "type": "integer",
+                  "example": "1"
+                },
+                "branchId": {
+                  "type": "integer",
+                  "example": "2"
+                },
+                "add": {
+                  "type": "integer",
+                  "example": "25"
+                },
+                "date": {
+                  "type": "date",
+                  "example": "2023-07-03"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "responsesLogin": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": "2"
+          },
+          "name": {
+            "type": "string",
+            "example": "Muhamad Saddam Husein"
+          },
+          "roleId": {
+            "type": "integer",
+            "example": "2"
+          },
+          "role": {
+            "type": "string",
+            "example": "Employee"
+          },
+          "branchId": {
+            "type": "integer",
+            "example": "2"
+          },
+          "location": {
+            "type": "string",
+            "example": "Klari"
+          },
+          "accessToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6Ik11aGFtYWQgU2FkZGFtIEh1c2VpbiIsInVzZXJuYW1lIjoiYWRhbSIsInJvbGVJZCI6MiwiYnJhbmNoSWQiOjIsImlhdCI6MTY4Nzc2MTU4OH0.dtVCgiv9F4-4LCmynAjZhTehyxfsuRxj8OVWscWJMKw"
+          }
+        }
+      },
+      "user": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": "2"
+          },
+          "fullName": {
+            "type": "string",
+            "example": "Muhamad Saddam Husein"
+          },
+          "username": {
+            "type": "string",
+            "example": "adam"
+          },
+          "roleId": {
+            "type": "integer",
+            "example": "2"
+          },
+          "branchId": {
+            "type": "integer",
+            "example": "2"
+          },
+          "updatedAt": {
+            "type": "date",
+            "example": "2023-06-13T09:37:04.618Z"
+          },
+          "createdAt": {
+            "type": "date",
+            "example": "2023-06-13T09:37:04.618Z"
+          }
+        }
+      },
+      "item": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": "2"
+          },
+          "color": {
+            "type": "string",
+            "example": "black"
+          },
+          "type": {
+            "type": "string",
+            "example": "black"
+          },
+          "stock": {
+            "type": "integer",
+            "example": "25"
+          },
+          "branchId": {
+            "type": "integer",
+            "example": "2"
+          },
+          "updatedAt": {
+            "type": "date",
+            "example": "2023-06-13T09:37:04.618Z"
+          },
+          "createdAt": {
+            "type": "date",
+            "example": "2023-06-13T09:37:04.618Z"
+          }
+        }  
+      },
+      "branch": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": "2"
+          },
+          "location": {
+            "type": "string",
+            "example": "Klari"
+          },
+          "updatedAt": {
+            "type": "date",
+            "example": "2023-06-13T09:37:04.618Z"
+          },
+          "createdAt": {
+            "type": "date",
+            "example": "2023-06-13T09:37:04.618Z"
+          }
+        }  
+      },
+      "transaction": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": "2"
+          },
+          "branchId": {
+            "type": "integer",
+            "example": "2"
+          },
+          "itemId": {
+            "type": "integer",
+            "example": "2"
+          },
+          "stock": {
+            "type": "integer",
+            "example": "25"
+          },
+          "out": {
+            "type": "integer",
+            "example": "5"
+          },
+          "finalStock": {
+            "type": "integer",
+            "example": "20"
+          },
+          "transactionDate": {
+            "type": "date",
+            "example": "2023-07-03T00:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "date",
+            "example": "2023-07-03T09:37:04.618Z"
+          },
+          "createdAt": {
+            "type": "date",
+            "example": "2023-07-03T09:37:04.618Z"
+          },
+          "item": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": "2"
+              },
+              "color": {
+                "type": "string",
+                "example": "black"
+              },
+              "type": {
+                "type": "string",
+                "example": "black"
+              },
+              "stock": {
+                "type": "integer",
+                "example": "20"
+              },
+              "branchId": {
+                "type": "integer",
+                "example": "2"
+              },
+              "updatedAt": {
+                "type": "date",
+                "example": "2023-06-13T09:37:04.618Z"
+              },
+              "createdAt": {
+                "type": "date",
+                "example": "2023-06-13T09:37:04.618Z"
+              }
+            }  
+          },
+          "branch": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": "2"
+              },
+              "location": {
+                "type": "string",
+                "example": "Klari"
+              },
+              "updatedAt": {
+                "type": "date",
+                "example": "2023-06-13T09:37:04.618Z"
+              },
+              "createdAt": {
+                "type": "date",
+                "example": "2023-06-13T09:37:04.618Z"
+              }
+            }  
+          }
+        }  
+      },
+      "shipment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": "2"
+          },
+          "branchId": {
+            "type": "integer",
+            "example": "2"
+          },
+          "itemId": {
+            "type": "integer",
+            "example": "2"
+          },
+          "stock": {
+            "type": "integer",
+            "example": "25"
+          },
+          "add": {
+            "type": "integer",
+            "example": "25"
+          },
+          "finalStock": {
+            "type": "integer",
+            "example": "50"
+          },
+          "shipmentDate": {
+            "type": "date",
+            "example": "2023-07-03T00:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "date",
+            "example": "2023-07-03T09:37:04.618Z"
+          },
+          "createdAt": {
+            "type": "date",
+            "example": "2023-07-03T09:37:04.618Z"
+          },
+          "item": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": "2"
+              },
+              "color": {
+                "type": "string",
+                "example": "black"
+              },
+              "type": {
+                "type": "string",
+                "example": "black"
+              },
+              "stock": {
+                "type": "integer",
+                "example": "50"
+              },
+              "branchId": {
+                "type": "integer",
+                "example": "2"
+              },
+              "updatedAt": {
+                "type": "date",
+                "example": "2023-06-13T09:37:04.618Z"
+              },
+              "createdAt": {
+                "type": "date",
+                "example": "2023-06-13T09:37:04.618Z"
+              }
+            }  
+          },
+          "branch": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": "2"
+              },
+              "location": {
+                "type": "string",
+                "example": "Klari"
+              },
+              "updatedAt": {
+                "type": "date",
+                "example": "2023-06-13T09:37:04.618Z"
+              },
+              "createdAt": {
+                "type": "date",
+                "example": "2023-06-13T09:37:04.618Z"
+              }
+            }  
+          }
+        }  
+      }
+    },
+    "securitySchemes": {
+      "bearerToken": {
+        "description": "Insert Token, You can get it after login",
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
