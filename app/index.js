@@ -5,6 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const router = require("../config/routes/index");
 const path = require("path")
+const cookieParser = require('cookie-parser');
 
 // inisialisasi setelah import statement
 const app = express();
@@ -17,11 +18,12 @@ const httpStatus = require("http-status");
 // Settings view engine
 app.set("views", __dirname + "/../views");
 app.set("view engine", "ejs");
+app.use(cookieParser());
 
 // Public
 app.use(express.static(path.join(__dirname, "/../public")));
-app.use('/css', express.static(__dirname + '/../public/css'));
-app.use('/img', express.static(__dirname + '/../public/img'));
+// app.use('/css', express.static(__dirname + '/../public/css'));
+// app.use('/img', express.static(__dirname + '/../public/img'));
 app.use(express.static(path.join(__dirname, "controllers")));
 
 app.use(

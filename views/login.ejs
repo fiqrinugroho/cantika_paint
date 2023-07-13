@@ -2,11 +2,13 @@
 <html>
 <head>
   <title>Login</title>
-  <link rel="stylesheet" type="text/css" href="/css/styles.css"> <!-- Contoh: menghubungkan file CSS eksternal -->
 </head>
 <body>
   <h1>Login</h1>
-  <form method="POST" action="/api/auth/login"> <!-- Contoh: form mengirim data ke route "/login" -->
+  <% if (error) { %>
+    <p class="error-message"><%= error %></p>
+  <% } %>
+  <form method="POST" action="/login"> <!-- Contoh: form mengirim data ke route "/login" -->
     <div>
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required>

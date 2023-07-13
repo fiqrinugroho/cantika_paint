@@ -1,14 +1,13 @@
+
 <!DOCTYPE html>
 <html>
 <head>
   <title>My EJS App</title>
 </head>
 <body>
-  <h1>Welcome to <%= title %>!</h1>
-  <form method="POST" action="/login"> <!-- Contoh: form mengirim data ke route "/login" -->
-    <div>
-      <button type="submit">Login</button>
-    </div>
-  </form>
+  <h1>your branch id <%= branch %>!</h1>
+      <a href="/logout">
+        <button type="button">Logout</button>
+      </a>
 </body>
 </html>
