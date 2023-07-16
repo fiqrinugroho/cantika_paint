@@ -1,23 +1,19 @@
 const router = require("express").Router();
 const axios = require("axios");
+const auth = require("../../middlewares/authViews");
 
 // dashboard admin
-router.get('/', (req, res) => {
+router.get('/', auth, (req, res) => {
   const token = req.cookies.token;
   const branch = req.cookies.branch;
   const role = req.cookies.role;
-
-  // Jika token tidak ada, alihkan ke halaman login
-  if (!token) {
-    res.redirect('/login');
-  } else {
-    // Jika token ada, lanjutkan ke halaman berikutnya
-    const data = {
-      branch,
-      role,
-    };
-    res.render('index', data);
-  }
+  const username = req.cookies.username;
+  const data = {
+    branch,
+    role,
+    username,
+  };
+  res.render('index', data);
 });
 
 router.get('/login', (req, res) => {
@@ -33,6 +29,7 @@ router.post('/login', async (req, res) => {
     res.cookie('token', response.data.data.accessToken);
     res.cookie('branch', response.data.data.branchId);
     res.cookie('role', response.data.data.roleId);
+    res.cookie('username', username);
     // Menampilkan halaman utama 
     res.redirect('/');
   } catch (error) {

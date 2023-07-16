@@ -136,6 +136,22 @@ const findTransByBranch = (transactionDate, branchId) => {
     return find;
   }
 };
+const findTransByColor = (transactionDate, itemId) => {
+    const find = transaction.findAll({
+      where: {
+        transactionDate
+      },
+      include: [
+        {
+          model: item,
+        },
+        {
+          model: branch,
+        },
+      ]
+    });
+    return find;
+};
 
 module.exports = {
   createTrans,
@@ -145,5 +161,6 @@ module.exports = {
   updateTrans,
   deleteTrans,
   findTransByBranch,
+  findTransByColor
 
 }

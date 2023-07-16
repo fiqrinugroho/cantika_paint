@@ -39,7 +39,6 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 app.use(router);
-
 // middleware for page not found
 app.use((req, res, next) => {
   next(
@@ -49,6 +48,7 @@ app.use((req, res, next) => {
     )
   );
 });
+
 // use middleware errorHandler
 app.use(errorHandler);
 
