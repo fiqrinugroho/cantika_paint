@@ -6,8 +6,6 @@ const auth = require("./auth");
 const item = require("./item");
 const trans = require("./transaction");
 const shipment = require("./shipment");
-const views = require("./views");
-const viewsTrans = require("./viewsTrans");
 
 // endpoint
 router.use("/api-docs", docs);
