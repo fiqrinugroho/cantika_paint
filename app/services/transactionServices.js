@@ -8,10 +8,7 @@ moment().format();
 
 const addTransaction = async (reqBody) => {
   const { itemId, branchId, out, date } = reqBody;
-  const duplicate = transactionRepository.findTransByColor(date, itemId)
 
-  if (duplicate)
-    throw new ApiError(httpStatus.BAD_REQUEST, "data transaksi ini sudah ada");
   if (!out)
     throw new ApiError(httpStatus.BAD_REQUEST, "masukan jumlah barang keluar");
   if (!date)

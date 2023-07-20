@@ -64,6 +64,9 @@ const findItemByColor = (color, branchId) => {
 
 const findItemByBranch = (branchId) => {
   const find = item.findAll({
+    order: [
+      ['type', 'ASC'],   
+    ],
     where : {
       branchId
     },

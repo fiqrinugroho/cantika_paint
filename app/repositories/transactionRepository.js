@@ -139,7 +139,8 @@ const findTransByBranch = (transactionDate, branchId) => {
 const findTransByColor = (transactionDate, itemId) => {
     const find = transaction.findAll({
       where: {
-        transactionDate
+        transactionDate,
+        itemId
       },
       include: [
         {
