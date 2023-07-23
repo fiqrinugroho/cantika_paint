@@ -955,6 +955,13 @@
             "example":"2023-07-03",
             "name": "date",
             "required": true
+          },
+          {
+            "in": "query",
+            "description": "input branch id",
+            "example":"1",
+            "name": "branchId",
+            "required": true
           }
         ],
         "responses": {

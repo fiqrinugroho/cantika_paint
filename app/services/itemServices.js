@@ -72,7 +72,7 @@ const getItemByColor = async (color, branchId) => {
 const getItemByBranch = async (branchId) => {
   const getItem = await itemRepository.findItemByBranch(branchId);
   if(getItem.length == 0){
-    throw new ApiError(httpStatus.NOT_FOUND, "Data Barang Masih Kosong");
+    return "Data Barang Masih Kosong";
   }else{
     return getItem
   }

@@ -80,7 +80,7 @@ const deleteTr = (req, res, next) => {
 
 const searchByDate = (req, res, next) => {
   transactionService
-    .getTransByDate(req.query.date, req.user.branchId)
+    .getTransByDate(req.query.date, req.query.branchId)
     .then((transaction) => {
       res.status(200).json({
         status: "OK",

@@ -21,6 +21,19 @@ const findItemById = (id) => {
 };
 
 const findItemByType = (type, branchId) => {
+  if (branchId == 0) {
+    const find = item.findAll({
+      order: [
+        ['branchId', 'ASC'],   
+      ],
+      include: [
+        {
+          model: branch,
+        },
+      ]
+    });
+    return find;
+  }
   const find = item.findAll({
     where: {
       [Op.and] :[
@@ -63,20 +76,39 @@ const findItemByColor = (color, branchId) => {
 };
 
 const findItemByBranch = (branchId) => {
-  const find = item.findAll({
-    order: [
-      ['type', 'ASC'],   
-    ],
-    where : {
-      branchId
-    },
-    include: [
-      {
-        model: branch,
+  // attributes: ['email'],
+  // raw: true, // Agar hasil query berupa data mentah (plain JSON)
+  // distinct: true,
+  if (branchId == 0) {
+    const find = item.findAll({
+      order: [
+        ['branchId', 'ASC'],
+        ['type', 'ASC'],   
+      ],
+      include: [
+        {
+          model: branch,
+        },
+      ]
+    });
+    return find;
+  }else{
+    const find = item.findAll({
+      order: [
+        ['type', 'ASC'],   
+      ],
+      where : {
+        branchId
       },
-    ],
-  });
-  return find;
+      include: [
+        {
+          model: branch,
+        },
+      ],
+    });
+    return find;
+  }
+  
 };
 
 const findItemByColorAndType = (color, type, branchId) => {
