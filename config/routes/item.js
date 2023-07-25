@@ -17,5 +17,6 @@ router.delete("/delete/:id", Authentication, isAdmin, item.deleteItem);
 router.get("/filter", item.filterByType);
 router.get("/search", item.searchByColor);
 router.get("/branch/:id", item.getByBranch);
+router.get("/auto/:id", item.getAutocomplete);
 
 module.exports = router;

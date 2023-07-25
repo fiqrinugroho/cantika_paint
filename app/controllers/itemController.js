@@ -123,6 +123,22 @@ const getByBranch = (req, res, next) => {
     });
 };
 
+const getAutocomplete = (req, res, next) => {
+  itemService
+    .getAutocomplete(req.params.id)
+    .then((item) => {
+      res.status(200).json({
+        status: "OK",
+        message: "Menampilkan Data Barang",
+        totalData: item.length,
+        data: item,
+      });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
 module.exports = {
   add,
   update,
@@ -131,5 +147,6 @@ module.exports = {
   getById,
   filterByType,
   searchByColor,
-  getByBranch
+  getByBranch,
+  getAutocomplete
 };

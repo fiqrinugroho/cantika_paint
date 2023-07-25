@@ -130,11 +130,12 @@ const deleteTransById = async (id) => {
 const getTransByDate = async (date, branchId) => {
   const transactionDate = formatTime(date);
   const trans = await transactionRepository.findTransByBranch(transactionDate, branchId);
-  if(trans.length == 0){
-    throw new ApiError(httpStatus.NOT_FOUND, "Data Transaksi Masih Kosong");
-  }else{
-    return trans
-  }
+  // if(trans.length == 0){
+  //   throw new ApiError(httpStatus.NOT_FOUND, "Data Transaksi Masih Kosong");
+  // }else{
+  //   return trans
+  // }
+  return trans
 };
 
 module.exports = {

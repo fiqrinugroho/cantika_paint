@@ -69,15 +69,32 @@ const getItemByColor = async (color, branchId) => {
   }
 }
 
-const getItemByBranch = async (branchId) => {
-  const getItem = await itemRepository.findItemByBranch(branchId);
-  if(getItem.length == 0){
-    return "Data Barang Masih Kosong";
-  }else{
-    return getItem
-  }
+const getAutocomplete = async (branchId) => {
+  const getItem = await itemRepository.getAuto(branchId);
+  const uniqueData = getUniqueValues(getItem, 'color');
+  console.log(uniqueData.length)
+  return uniqueData
 }
 
+const getItemByBranch = async (branchId) => {
+  const getItem = await itemRepository.findItemByBranch(branchId);
+    return getItem
+}
+
+function getUniqueValues(dataArray, key) {
+  const uniqueSet = new Set();
+  const uniqueData = [];
+
+  for (const item of dataArray) {
+    const keyValue = key ? item[key] : item;
+    if (!uniqueSet.has(keyValue)) {
+      uniqueSet.add(keyValue);
+      uniqueData.push(item);
+    }
+  }
+
+  return uniqueData;
+}
 module.exports = {
   addItem,
   getAllItem,
@@ -86,5 +103,6 @@ module.exports = {
   getItemById,
   getItemByType,
   getItemByColor,
-  getItemByBranch
+  getItemByBranch,
+  getAutocomplete
 };

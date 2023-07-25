@@ -111,6 +111,17 @@ const findItemByBranch = (branchId) => {
   
 };
 
+const getAuto = (branchId) => {
+    const find = item.findAll({
+      attributes: ['id','color'],
+      raw : true,
+      where : {
+        branchId
+      },
+    });
+    return find;
+};
+
 const findItemByColorAndType = (color, type, branchId) => {
   const find = item.findOne({
     where: {
@@ -192,4 +203,5 @@ module.exports = {
   findItemByColorAndType,
   getItem,
   updateStock,
+  getAuto
 };
