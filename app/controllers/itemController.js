@@ -125,7 +125,7 @@ const getByBranch = (req, res, next) => {
 
 const getAutocomplete = (req, res, next) => {
   itemService
-    .getAutocomplete(req.params.id)
+    .getAutocomplete(req.query.branchId, req.query.type)
     .then((item) => {
       res.status(200).json({
         status: "OK",

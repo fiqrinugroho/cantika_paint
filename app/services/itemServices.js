@@ -69,8 +69,8 @@ const getItemByColor = async (color, branchId) => {
   }
 }
 
-const getAutocomplete = async (branchId) => {
-  const getItem = await itemRepository.getAuto(branchId);
+const getAutocomplete = async (branchId, type) => {
+  const getItem = await itemRepository.getAuto(branchId, type);
   const uniqueData = getUniqueValues(getItem, 'color');
   console.log(uniqueData.length)
   return uniqueData

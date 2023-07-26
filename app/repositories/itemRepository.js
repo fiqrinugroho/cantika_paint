@@ -111,12 +111,13 @@ const findItemByBranch = (branchId) => {
   
 };
 
-const getAuto = (branchId) => {
+const getAuto = (branchId, type) => {
     const find = item.findAll({
       attributes: ['id','color'],
       raw : true,
       where : {
-        branchId
+        branchId,
+        type
       },
     });
     return find;
