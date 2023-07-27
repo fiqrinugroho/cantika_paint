@@ -18,7 +18,7 @@ const addShipment = async (reqBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, "barang tidak boleh kosong");
 
   const item = await itemRepository.findItemById(itemId)
-  const finalStock = (item.stock + add)
+  const finalStock = parseInt(item.stock) + parseInt(add)
   const stock = item.stock
   const shipmentDate = formatTime(date);
   const report = {
@@ -64,20 +64,20 @@ const updateShipById = async (reqBody, id) => {
     throw new ApiError(httpStatus.NOT_FOUND, "Data Pengiriman Tidak Ditemukan");
   } else {
     const item = await itemRepository.findItemById(ship.itemId);
-    const finalStock = item.stock - ship.add;
+    const finalStock = parseInt(item.stock) - parseInt(ship.add);
     const update = await itemRepository.updateStock(finalStock, ship.itemId)
     const newItem =  await itemRepository.findItemById(ship.itemId);
     if(!update){
       throw new ApiError(httpStatus.BAD_REQUEST, "data barang gagal diperbarui");
     }else{
-      const newFinalStock = newItem.stock + add;
+      const newFinalStock = parseInt(newItem.stock) + parseInt(add);
 
       const updateItem = await itemRepository.updateStock(newFinalStock, ship.itemId)
       const stock = newItem.stock;
       if(!updateItem){
         throw new ApiError(httpStatus.BAD_REQUEST, "data barang gagal diperbarui");
       }else {
-        const final = stock + add
+        const final = parseInt(stock) + parseInt(add)
         const newShip = {
           stock,
           add,
