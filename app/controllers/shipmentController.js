@@ -64,7 +64,7 @@ const deleteShip = (req, res, next) => {
 
 const searchByDate = (req, res, next) => {
   shipmentService
-    .getShipByDate(req.query.date, req.user.branchId)
+    .getShipByDate(req.query.date, req.query.branchId)
     .then((shipment) => {
       res.status(200).json({
         status: "OK",

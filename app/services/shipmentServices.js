@@ -18,7 +18,7 @@ const addShipment = async (reqBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, "barang tidak boleh kosong");
 
   const item = await itemRepository.findItemById(itemId)
-  const finalStock = item.stock + add
+  const finalStock = (item.stock + add)
   const stock = item.stock
   const shipmentDate = formatTime(date);
   const report = {
@@ -114,11 +114,12 @@ const deleteShipById = async (id) => {
 const getShipByDate = async (date, branchId) => {
   const shipmentDate = formatTime(date);
   const ship = await shipmentRepository.findShipByBranch(shipmentDate, branchId);
-  if(ship.length == 0){
-    throw new ApiError(httpStatus.NOT_FOUND, "Data Pengiriman Masih Kosong");
-  }else{
-    return ship
-  }
+  return ship
+  // if(ship.length == 0){
+  //   throw new ApiError(httpStatus.NOT_FOUND, "Data Pengiriman Masih Kosong");
+  // }else{
+  //   return ship
+  // }
 };
 
 module.exports = {
