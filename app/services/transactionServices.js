@@ -8,6 +8,9 @@ moment().format();
 
 const addTransaction = async (reqBody) => {
   const { itemId, branchId, out, date } = reqBody;
+  const checkItem = await transactionRepository.findDuplicateTrans(formatTime(date), itemId, branchId)
+  if (checkItem)
+    throw new ApiError(httpStatus.OK, "Data transaksi sudah ada");
 
   if (!out)
     throw new ApiError(httpStatus.BAD_REQUEST, "masukan jumlah barang keluar");
@@ -17,15 +20,14 @@ const addTransaction = async (reqBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, "cabang belum dipilih");
   if (!itemId)
     throw new ApiError(httpStatus.BAD_REQUEST, "barang tidak boleh kosong");
-
   const item = await itemRepository.findItemById(itemId)
-  if (out > item.stock ){
-    if(item.stock === 0){
-      throw new ApiError(httpStatus.BAD_REQUEST, "stok barang sudah habis");
-    }else{
-      throw new ApiError(httpStatus.BAD_REQUEST, "barang keluar lebih banyak dari stok yang ada");
+  if (out > item.stock) {
+    if (item.stock === 0) {
+      throw new ApiError(httpStatus.OK, "stok barang sudah habis");
+    } else {
+      throw new ApiError(httpStatus.OK, "barang keluar lebih banyak dari stok yang ada");
     }
-  }else {
+  } else {
     const finalStock = item.stock - out
     const stock = item.stock
     const transactionDate = formatTime(date);
@@ -39,23 +41,22 @@ const addTransaction = async (reqBody) => {
     }
     const trans = await transactionRepository.createTrans(report);
 
-    if (!trans){
+    if (!trans) {
       throw new ApiError(httpStatus.BAD_REQUEST, "laporan gagal disimpan");
-    }else{
+    } else {
       const updateItem = await itemRepository.updateStock(finalStock, itemId)
 
-      if(!updateItem){
+      if (!updateItem) {
         throw new ApiError(httpStatus.BAD_REQUEST, "data barang gagal diperbarui");
-      }else {
+      } else {
         return await transactionRepository.findTransById(trans.id)
       }
     }
   }
-  
 }
 
-const formatTime = (date) =>{
-  const localTime = moment().format(`${date}`); 
+const formatTime = (date) => {
+  const localTime = moment().format(`${date}`);
   const proposedDate = localTime + "T00:00:00.000Z";
   return proposedDate;
 };
@@ -69,10 +70,10 @@ const getTransactionByBranch = async (branchId) => {
 }
 
 const updateTransById = async (reqBody, id) => {
-  const { out,} = reqBody;
+  const { out, } = reqBody;
   if (!out)
     throw new ApiError(httpStatus.BAD_REQUEST, "masukan jumlah barang keluar");
-    
+
   const trans = await transactionRepository.findTransById(id);
 
   if (!trans) {
@@ -81,17 +82,17 @@ const updateTransById = async (reqBody, id) => {
     const item = await itemRepository.findItemById(trans.itemId);
     const finalStock = item.stock + trans.out;
     const update = await itemRepository.updateStock(finalStock, trans.itemId)
-    const newItem =  await itemRepository.findItemById(trans.itemId);
-    if(!update){
+    const newItem = await itemRepository.findItemById(trans.itemId);
+    if (!update) {
       throw new ApiError(httpStatus.BAD_REQUEST, "data barang gagal diperbarui");
-    }else{
+    } else {
       const newFinalStock = newItem.stock - out;
 
       const updateItem = await itemRepository.updateStock(newFinalStock, trans.itemId)
       const stock = newItem.stock;
-      if(!updateItem){
+      if (!updateItem) {
         throw new ApiError(httpStatus.BAD_REQUEST, "data barang gagal diperbarui");
-      }else {
+      } else {
         const final = stock - out
         const newTrans = {
           stock,
@@ -102,7 +103,7 @@ const updateTransById = async (reqBody, id) => {
         return await transactionRepository.findTransById(id);
       }
     }
-    
+
   }
 };
 
@@ -114,13 +115,13 @@ const deleteTransById = async (id) => {
     const item = await itemRepository.findItemById(trans.itemId);
     const finalStock = item.stock + trans.out;
     const update = await itemRepository.updateStock(finalStock, trans.itemId);
-    if(!update){
+    if (!update) {
       throw new ApiError(httpStatus.BAD_REQUEST, "data barang gagal diperbarui");
-    }else{
+    } else {
       const del = await transactionRepository.deleteTrans(id);
-      if(!del){
+      if (!del) {
         throw new ApiError(httpStatus.BAD_REQUEST, "data transaksi gagal dihapus");
-      }else {
+      } else {
         return await itemRepository.findItemById(trans.itemId);
       }
     };
@@ -146,4 +147,3 @@ module.exports = {
   deleteTransById,
   getTransByDate,
 };
-  

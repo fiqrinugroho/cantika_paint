@@ -154,6 +154,19 @@ const findTransByColor = (transactionDate, itemId) => {
     return find;
 };
 
+const findDuplicateTrans= (transactionDate, itemId, branchId) => {
+  const find = transaction.findOne({
+    where: {
+      [Op.and]: [
+        { transactionDate },
+        { itemId },
+        { branchId }
+      ]
+    }
+  });
+  return find;
+};
+
 module.exports = {
   createTrans,
   findTransById,
@@ -162,6 +175,6 @@ module.exports = {
   updateTrans,
   deleteTrans,
   findTransByBranch,
-  findTransByColor
-
+  findTransByColor,
+  findDuplicateTrans
 }

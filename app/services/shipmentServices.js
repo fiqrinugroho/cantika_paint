@@ -8,6 +8,10 @@ moment().format();
 
 const addShipment = async (reqBody) => {
   const { itemId, branchId, add, date } = reqBody;
+  const checkItem = await shipmentRepository.findDuplicateShip(formatTime(date), itemId, branchId)
+  if(checkItem)
+    throw new ApiError(httpStatus.OK, "Data pengiriman sudah ada");
+
   if (!add)
     throw new ApiError(httpStatus.BAD_REQUEST, "masukan jumlah barang keluar");
   if (!date)

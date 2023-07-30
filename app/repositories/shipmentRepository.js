@@ -137,6 +137,19 @@ const findShipByBranch = (shipmentDate, branchId) => {
   }
 };
 
+const findDuplicateShip= (shipmentDate, itemId, branchId) => {
+  const find = shipment.findOne({
+    where: {
+      [Op.and]: [
+        { shipmentDate },
+        { itemId },
+        { branchId }
+      ]
+    }
+  });
+  return find;
+};
+
 module.exports = {
   createShipment,
   findShipById,
@@ -145,5 +158,5 @@ module.exports = {
   updateShip,
   deleteShip,
   findShipByBranch,
-
+  findDuplicateShip
 }
