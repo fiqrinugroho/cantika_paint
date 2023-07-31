@@ -8,7 +8,7 @@ const createUser = (createArgs) => {
 
 // untuk mencari data sesuai dengan username user
 const findUsername = (username) => {
-  // cari user berdasarkan email
+  // cari user berdasarkan username
   const find = user.findOne({
     where: {
       username,
@@ -24,20 +24,93 @@ const findUsername = (username) => {
   });
   return find;
 };
+// untuk mencari data sesuai dengan username user
+const findUsernameAndId = (username, id) => {
+  // cari user berdasarkan username
+  const find = user.findOne({
+    where: {
+      [Op.and]: [
+        {username},
+        { id }
+      ]
+    },
+    include: [
+    {
+      model: role,
+    },
+    {
+      model: branch,
+    },
+  ]
+  });
+  return find;
+};
+
+const updateUserById = async (updateArgs, id) => {
+  const {fullName, username, password, roleId, branchId,} = updateArgs
+  if(password){
+    return await user.update({fullName, username, password, roleId, branchId,}, { 
+      where: { id, }, 
+      include: [
+        {
+          model: role,
+        },
+        {
+          model: branch,
+        },
+      ]
+    });
+  }else {
+    return await user.update({fullName, username, roleId, branchId,}, { 
+      where: { id, }, 
+      include: [
+        {
+          model: role,
+        },
+        {
+          model: branch,
+        },
+      ]
+    });
+  }
+
+};
+
+const updatePassword = (password, id) => {
+  const updated = user.update({password},{
+    where: {
+      id,
+    },
+    include: [
+    {
+      model: role,
+    },
+    {
+      model: branch,
+    },
+  ]
+  });
+  return updated;
+};
 
 const getAllUser = () => {
   return user.findAll({attributes: { exclude: ["password",], },});
 }
 
-const findByBranch = (id) => {
+const findById = (id) => {
   // cari user berdasarkan branch id
   const find = user.findOne({
     where: {
       id,
     },
-    include: {
-      model: role,
-    },
+    include: [
+      {
+        model: role,
+      },
+      {
+        model: branch,
+      },
+    ]
   });
   return find; 
 };
@@ -45,6 +118,9 @@ const findByBranch = (id) => {
 module.exports = {
   createUser,
   findUsername,
-  findByBranch,
+  findUsernameAndId,
+  findById,
   getAllUser,
+  updateUserById,
+  updatePassword,
 };

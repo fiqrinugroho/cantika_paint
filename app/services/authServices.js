@@ -11,7 +11,7 @@ const login = async (reqBody) => {
 
   // gagal melanjutkan karena username nya tidak ada
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, "user not found");
+    throw new ApiError(httpStatus.NOT_FOUND, "user tidak ditemukan");
   }
   // check password user, jika success login dapat response yang isinya TOKEN
   const isPasswordCorrect = verifyPassword(password, user.password);
@@ -29,34 +29,34 @@ const login = async (reqBody) => {
   } else {
     throw new ApiError(
       httpStatus.BAD_REQUEST,
-      "The password you entered is incorrect"
+      "password yang anda masukan salah"
     );
   }
 };
 
 const registerNewEmployee = async (reqBody) => {
-  const { fullName, username, password, branchId} = reqBody;
+  const { fullName, username, password, branchId } = reqBody;
 
   // validasi data yang kosong
   if (!username)
-    throw new ApiError(httpStatus.BAD_REQUEST, "username cannot be empty");
+    throw new ApiError(httpStatus.BAD_REQUEST, "username tidak boleh kosong");
   if (!fullName)
-    throw new ApiError(httpStatus.BAD_REQUEST, "full name cannot be empty");
-  if (!branchId) 
-    throw new ApiError(httpStatus.BAD_REQUEST, "last name cannot be empty");
+    throw new ApiError(httpStatus.BAD_REQUEST, "nama tidak boleh kosong");
+  if (!branchId)
+    throw new ApiError(httpStatus.BAD_REQUEST, "silahkan pilih cabang untuk user");
   if (!password)
-    throw new ApiError(httpStatus.BAD_REQUEST, "password cannot be empty");
+    throw new ApiError(httpStatus.BAD_REQUEST, "password tidak boleh kosong");
 
   const user = await authRepository.findUsername(username);
   if (user) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "username already used");
+    throw new ApiError(httpStatus.BAD_REQUEST, "username telah digunakan");
   }
   // validasi minimum password length
   const passswordLength = password.length >= 8;
   if (!passswordLength) {
     throw new ApiError(
       httpStatus.BAD_REQUEST,
-      "minimum password length must be 8 charater or more"
+      "password minimal 8 karakter"
     );
   }
 
@@ -89,6 +89,67 @@ const getAllUser = async () => {
   return getUser;
 }
 
+const editUser = async (reqBody, id) => {
+  const { username, fullName, branchId, roleId, password } = reqBody
+  
+  if(password){
+    // validasi minimum password length
+    const passswordLength = password.length >= 8;
+    if (!passswordLength) {
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        "password minimal 8 karakter"
+      );
+    }
+
+    const hash = encryptPassword(password);
+    let newUser = {
+      fullName,
+      username,
+      branchId,
+      roleId,
+      password: hash,
+    };
+    const update = await authRepository.updateUserById(newUser, id);
+    if (!update)
+      throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "gagal mengupdate user");
+  }else{
+    let newUser = {
+      fullName,
+      username,
+      branchId,
+      roleId,
+    }
+    const update = await authRepository.updateUserById(newUser, id);
+    if (!update)
+      throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "gagal mengupdate user");
+  }
+}
+const changePassword = async (reqBody, id) => {
+  const { newPassword, password } = reqBody
+  if (newPassword === password)
+    throw new ApiError(httpStatus.BAD_REQUEST, "password baru tidak boleh sama dengan password sebelumnya");
+  // validasi minimum password length
+  const passswordLength = newPassword.length >= 8;
+  if (!passswordLength) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "password minimal 8 karakter"
+    );
+  }
+  const user = await authRepository.findById(id);
+  const isPasswordCorrect = verifyPassword(password, user.password);
+  if (!isPasswordCorrect)
+    throw new ApiError(httpStatus.BAD_REQUEST, "password yang anda masukan salah");
+
+  const hash = encryptPassword(newPassword);
+  const updatePassword = await authRepository.updatePassword(hash, id)
+  if(!updatePassword)
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "gagal merubah password");
+
+  const newUser = await authRepository.findById(id);
+  return newUser
+}
 const createToken = (user) => {
   return jwt.sign(
     {
@@ -117,5 +178,7 @@ const verifyPassword = (password, encryptedPassword) => {
 module.exports = {
   login,
   registerNewEmployee,
-  getAllUser
+  getAllUser,
+  editUser,
+  changePassword
 };

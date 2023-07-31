@@ -35,10 +35,38 @@ const user = (req, res, next) => {
   authService
     .getAllUser(req.body)
     .then((user) => {
-      res.status(201).json({
+      res.status(200).json({
         status: "OK",
         totalData: user.length,
         data: user,
+      });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+const editUser = (req, res, next) => {
+  authService
+    .editUser(req.body, req.params.id)
+    .then(() => {
+      res.status(200).json({
+        status: "OK",
+        message: "Success Update User",
+      });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+const changePassword = (req, res, next) => {
+  authService
+    .changePassword(req.body, req.user.id)
+    .then((user) => {
+      res.status(200).json({
+        status: "OK",
+        message: "Success Update Password",
       });
     })
     .catch((err) => {
@@ -50,4 +78,6 @@ module.exports = {
   login,
   register,
   user,
+  editUser,
+  changePassword,
 };

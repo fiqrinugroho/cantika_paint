@@ -238,6 +238,183 @@
         }
       }
     },
+    "/api/auth/editUser/{id}": {
+      "put": {
+        "tags": ["Auth"],
+        "summary": "Admin edit data user",
+        "parameters": [
+          {
+            "in": "path",
+            "description": "input id user",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "requestBody": {
+          "description": "Only admin can edit user, and this API can be used for upgrade user to admin",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fullName": {
+                    "type": "string",
+                    "example": "Muhamad Saddam Husein"
+                  },
+                  "username": {
+                    "type": "string",
+                    "example": "adam"
+                  },
+                  "branchId": {
+                    "type": "integer",
+                    "example": "2"
+                  },
+                  "roleId": {
+                      "type": "integer",
+                      "example": "1"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "qwerty123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Update User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Success Update User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "password minimum 8 karakter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "password minimal 8 karakter"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/isAdmin"
+          }
+        }
+      }
+    },
+    "/api/auth/changePassword": {
+      "put": {
+        "tags": ["Auth"],
+        "summary": "User Change Password",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "requestBody": {
+          "description": "For User To Change Password",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "newPassword": {
+                    "type": "string",
+                    "example": "rahasia123"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "qwerty123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success Update Pasword",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Success Update Password"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The new password is same as the old Password ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "password baru tidak boleh sama dengan password sebelumnya"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
     "/api/item/add": {
       "post": {
         "summary": "Add new item data",
