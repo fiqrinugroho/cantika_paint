@@ -80,6 +80,13 @@ const updateTransById = async (reqBody, id) => {
     throw new ApiError(httpStatus.NOT_FOUND, "Data Transaksi Tidak Ditemukan");
   } else {
     const item = await itemRepository.findItemById(trans.itemId);
+    if (out > item.stock) {
+      if (item.stock === 0) {
+        throw new ApiError(httpStatus.BAD_REQUEST, "stok barang sudah habis");
+      } else {
+        throw new ApiError(httpStatus.BAD_REQUEST, "barang keluar lebih banyak dari stok yang ada");
+      }
+    }
     const finalStock = item.stock + trans.out;
     const update = await itemRepository.updateStock(finalStock, trans.itemId)
     const newItem = await itemRepository.findItemById(trans.itemId);
