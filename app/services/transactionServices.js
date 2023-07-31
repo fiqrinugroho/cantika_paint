@@ -10,7 +10,7 @@ const addTransaction = async (reqBody) => {
   const { itemId, branchId, out, date } = reqBody;
   const checkItem = await transactionRepository.findDuplicateTrans(formatTime(date), itemId, branchId)
   if (checkItem)
-    throw new ApiError(httpStatus.OK, "Data transaksi sudah ada");
+    throw new ApiError(httpStatus.BAD_REQUEST, "Data transaksi sudah ada");
 
   if (!out)
     throw new ApiError(httpStatus.BAD_REQUEST, "masukan jumlah barang keluar");
@@ -23,9 +23,9 @@ const addTransaction = async (reqBody) => {
   const item = await itemRepository.findItemById(itemId)
   if (out > item.stock) {
     if (item.stock === 0) {
-      throw new ApiError(httpStatus.OK, "stok barang sudah habis");
+      throw new ApiError(httpStatus.BAD_REQUEST, "stok barang sudah habis");
     } else {
-      throw new ApiError(httpStatus.OK, "barang keluar lebih banyak dari stok yang ada");
+      throw new ApiError(httpStatus.BAD_REQUEST, "barang keluar lebih banyak dari stok yang ada");
     }
   } else {
     const finalStock = item.stock - out
