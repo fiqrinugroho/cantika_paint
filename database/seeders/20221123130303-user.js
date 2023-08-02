@@ -45,7 +45,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 4,
+        id: 5,
         fullName: "Dani",
         username: "dani",
         password: bcrypt.hashSync("qwerty123", 10),
@@ -55,7 +55,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 4,
+        id: 6,
         fullName: "Yogo Budi Santoso",
         username: "yogo",
         password: bcrypt.hashSync("qwerty123", 10),
@@ -65,7 +65,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 4,
+        id: 7,
         fullName: "Nendi",
         username: "nendi",
         password: bcrypt.hashSync("qwerty123", 10),
