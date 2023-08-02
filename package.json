@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon -r dotenv/config bin/www",
-    "db:config": "sequelize db:migrate && sequelize db:seed:all",
+    "db:config": "sequelize db:create && sequelize db:migrate && sequelize db:seed:all",
     "db:create": "sequelize db:create",
     "db:migrate": "sequelize db:migrate",
     "db:migrate:undo": "sequelize db:migrate:undo:all",
