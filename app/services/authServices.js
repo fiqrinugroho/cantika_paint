@@ -163,6 +163,17 @@ const createToken = (user) => {
   );
 };
 
+const deleteUserById = async (id) => {
+  const user = await authRepository.findById(id);
+
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User Tidak Ditemukan");
+  } else {
+    return await authRepository.deleteUser(id);
+  }
+};
+
+
 // const decodeToken = (token) => {
 //   return jwt.verify(token, JWT_SIGNATURE_KEY);
 // };
@@ -180,5 +191,6 @@ module.exports = {
   registerNewEmployee,
   getAllUser,
   editUser,
-  changePassword
+  changePassword,
+  deleteUserById
 };

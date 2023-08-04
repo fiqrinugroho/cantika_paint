@@ -74,10 +74,26 @@ const changePassword = (req, res, next) => {
     });
 };
 
+const deleteUser = (req, res, next) => {
+  userService
+    .deleteUserById(req.params.id)
+    .then(() => {
+      res.status(200).json({
+        status: "OK",
+        message: "Sukses Menghapus Data User",
+      });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+
 module.exports = {
   login,
   register,
   user,
   editUser,
   changePassword,
-};
+  deleteUser
+  };

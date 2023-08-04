@@ -415,6 +415,56 @@
         }
       }
     },
+    "/api/auth/delete/{id}": {
+      "delete": {
+        "summary": "Delete User Data By Id",
+        "tags": ["Auth"],
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "description": "input id user",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Delete User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Sukses Menghapus USer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/userNotFound"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/isAdmin"
+          }
+        }
+      }
+    },
     "/api/item/add": {
       "post": {
         "summary": "Add new item data",
@@ -1581,6 +1631,26 @@
                 "message": {
                   "type": "string",
                   "example": "Data Barang Tidak Ditemukan"
+                }
+              }
+            }
+          }
+        }
+      },
+      "userNotFound": {
+        "description": "Data Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "Failed"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "User Tidak Ditemukan"
                 }
               }
             }

@@ -13,5 +13,6 @@ router.put("/editUser/:id", Authentication, isAdmin, auth.editUser);
 router.post("/register", Authentication, isAdmin, auth.register);
 router.post("/login", auth.login);
 router.put("/changePassword", Authentication, auth.changePassword);
+router.delete("/delete/:id", Authentication, isAdmin, auth.deleteUser);
 
 module.exports = router;

@@ -114,6 +114,12 @@ const findById = (id) => {
   });
   return find; 
 };
+const deleteUser = async (id) => {
+  return await user.destroy({ 
+    where: { id, }, 
+  });
+};
+
 
 module.exports = {
   createUser,
@@ -123,4 +129,5 @@ module.exports = {
   getAllUser,
   updateUserById,
   updatePassword,
+  deleteUser
 };
