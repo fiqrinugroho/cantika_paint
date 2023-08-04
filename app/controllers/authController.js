@@ -75,7 +75,7 @@ const changePassword = (req, res, next) => {
 };
 
 const deleteUser = (req, res, next) => {
-  userService
+  authService
     .deleteUserById(req.params.id)
     .then(() => {
       res.status(200).json({
