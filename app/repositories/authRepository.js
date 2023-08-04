@@ -94,7 +94,17 @@ const updatePassword = (password, id) => {
 };
 
 const getAllUser = () => {
-  return user.findAll({attributes: { exclude: ["password",], },});
+  return user.findAll({
+    attributes: { exclude: ["password",], },
+    include: [
+      {
+        model: role,
+      },
+      {
+        model: branch,
+      },
+    ]
+  });
 }
 
 const findById = (id) => {
