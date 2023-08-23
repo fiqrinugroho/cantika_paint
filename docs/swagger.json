@@ -27,6 +27,11 @@
       "post": {
         "tags": ["Auth"],
         "summary": "Admin register a new user",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
         "requestBody": {
           "description": "Only admin can add new user ",
           "required": true,
