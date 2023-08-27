@@ -14,7 +14,7 @@ module.exports = {
     */
     const csv = require('csvtojson');
 
-    const csvFilePath = path.join(__dirname, '/../../data', 'wadas.csv');
+    const csvFilePath = path.join(__dirname, '/../../data', 'item.csv');
     // JSON-array of courses from CSV
     const courses = await csv().fromFile(csvFilePath);
     return await queryInterface.bulkInsert('items',courses);
