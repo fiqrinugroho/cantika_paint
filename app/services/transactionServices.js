@@ -10,12 +10,12 @@ const addTransaction = async (reqBody) => {
   const { itemId, branchId, out, date } = reqBody;
   const checkItem = await transactionRepository.findDuplicateTrans(formatTime(date), itemId, branchId)
   if (checkItem)
-    throw new ApiError(httpStatus.BAD_REQUEST, "Data transaksi sudah ada");
+    throw new ApiError(httpStatus.BAD_REQUEST, "Data penjualan sudah ada");
 
   if (!out)
     throw new ApiError(httpStatus.BAD_REQUEST, "masukan jumlah barang keluar");
   if (!date)
-    throw new ApiError(httpStatus.BAD_REQUEST, "tanggal transaksi tidak boleh kosong");
+    throw new ApiError(httpStatus.BAD_REQUEST, "tanggal penjualan tidak boleh kosong");
   if (!branchId)
     throw new ApiError(httpStatus.BAD_REQUEST, "cabang belum dipilih");
   if (!itemId)
@@ -77,7 +77,7 @@ const updateTransById = async (reqBody, id) => {
   const trans = await transactionRepository.findTransById(id);
 
   if (!trans) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Data Transaksi Tidak Ditemukan");
+    throw new ApiError(httpStatus.NOT_FOUND, "Data Penjualan Tidak Ditemukan");
   } else {
     const item = await itemRepository.findItemById(trans.itemId);
     if (out > item.stock) {
@@ -117,7 +117,7 @@ const updateTransById = async (reqBody, id) => {
 const deleteTransById = async (id) => {
   const trans = await transactionRepository.findTransById(id);
   if (!trans) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Data Transaksi Tidak Ditemukan");
+    throw new ApiError(httpStatus.NOT_FOUND, "Data Penjualan Tidak Ditemukan");
   } else {
     const item = await itemRepository.findItemById(trans.itemId);
     const finalStock = item.stock + trans.out;
@@ -127,7 +127,7 @@ const deleteTransById = async (id) => {
     } else {
       const del = await transactionRepository.deleteTrans(id);
       if (!del) {
-        throw new ApiError(httpStatus.BAD_REQUEST, "data transaksi gagal dihapus");
+        throw new ApiError(httpStatus.BAD_REQUEST, "data penjualan gagal dihapus");
       } else {
         return await itemRepository.findItemById(trans.itemId);
       }
@@ -139,7 +139,7 @@ const getTransByDate = async (date, branchId) => {
   const transactionDate = formatTime(date);
   const trans = await transactionRepository.findTransByBranch(transactionDate, branchId);
   // if(trans.length == 0){
-  //   throw new ApiError(httpStatus.NOT_FOUND, "Data Transaksi Masih Kosong");
+  //   throw new ApiError(httpStatus.NOT_FOUND, "Data Penjualan Masih Kosong");
   // }else{
   //   return trans
   // }
