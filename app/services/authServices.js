@@ -34,8 +34,8 @@ const login = async (reqBody) => {
   }
 };
 
-const registerNewEmployee = async (reqBody) => {
-  const { fullName, username, password, branchId } = reqBody;
+const registerNewUser = async (reqBody) => {
+  const { fullName, username, password, branchId, roleId } = reqBody;
 
   // validasi data yang kosong
   if (!username)
@@ -46,6 +46,8 @@ const registerNewEmployee = async (reqBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, "silahkan pilih cabang untuk user");
   if (!password)
     throw new ApiError(httpStatus.BAD_REQUEST, "password tidak boleh kosong");
+  if (!roleId )
+    throw new ApiError(httpStatus.BAD_REQUEST, "role tidak boleh kosong");
 
   const user = await authRepository.findUsername(username);
   if (user) {
@@ -64,6 +66,7 @@ const registerNewEmployee = async (reqBody) => {
   const createUser = {
     fullName,
     username,
+    roleId ,
     branchId,
     password: hash,
   };
@@ -188,7 +191,7 @@ const verifyPassword = (password, encryptedPassword) => {
 
 module.exports = {
   login,
-  registerNewEmployee,
+  registerNewUser,
   getAllUser,
   editUser,
   changePassword,

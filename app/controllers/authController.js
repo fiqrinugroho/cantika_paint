@@ -18,11 +18,11 @@ const login = (req, res, next) => {
 
 const register = (req, res, next) => {
   authService
-    .registerNewEmployee(req.body)
+    .registerNewUser(req.body)
     .then((user) => {
       res.status(201).json({
         status: "OK",
-        message: "Success Register New Employee",
+        message: "Success Register New User",
         data: user,
       });
     })

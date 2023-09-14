@@ -52,6 +52,10 @@
                     "type": "integer",
                     "example": "2"
                   },
+                  "roleId": {
+                    "type": "integer",
+                    "example": "1"
+                  },
                   "password": {
                     "type": "string",
                     "example": "qwerty123"
